@@ -1,12 +1,52 @@
-import React from "react"
-import { Link } from "react-router-dom"
+import React, { useState, useEffect } from "react"
+import Layout from "./Layout"
+import { getProducts } from "./apiCore"
+
 
 export default function Home() {
+
+    const [productsBySell, setProductsBySell] = useState([])
+    const [productsByArrival, setProductsByArrival] = useState([])
+    const [error, setError] = useState(false)
+
+    const loadProductsBySell = () => {
+
+        getProducts('sold').then(data => {
+            if (data.error) {
+
+                setError(data.error);
+            } else {
+
+                setProductsBySell(data);
+            }
+        })
+    }
+
+    const loadProductsByArrival = () => {
+
+        getProducts('createdAt').then(data => {
+            if (data.error) {
+
+                setError(data.error);
+            } else {
+
+                setProductsByArrival(data);
+            }
+        })
+    }
+
+    useEffect(() => {
+
+        loadProductsBySell();
+        loadProductsByArrival();
+    }, [])
+
     return (
-        <div className="home-container">
-            <h1>You got the travel plans, we got the travel vans.</h1>
-            <p>Add adventure to your life by joining the #vanlife movement. Rent the perfect van to make your perfect road trip.</p>
-            <Link to="vans">Find your van</Link>
-        </div>
+        <Layout title="Home Page" description="Node React E-commerce App">
+
+            {JSON.stringify(productsByArrival)}
+            <hr />
+            {JSON.stringify(productsBySell)}
+        </Layout>
     )
 };
