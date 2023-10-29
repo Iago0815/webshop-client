@@ -39,7 +39,10 @@ const AddProduct = () => {
                setValues({...values, error:data.error})
             }  else {
 
-               setValues({...values, categories: data, formData: new FormData() })
+               setValues({
+                ...values, 
+                categories: data, 
+                formData: new FormData() })
             }
 
         })
